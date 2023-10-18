@@ -1,11 +1,11 @@
-<p style="color: green"><%= t('books.notice') %></p>
+<p style="color: green"><%= t('common.notice') %></p>
 
 <div class="show-item">
   <%= render @book %>
 </div>
 
 <nav class="page-nav">
-  <%= link_to t('books.edit_book'), edit_book_path(@book) %> |
-  <%= link_to t('books.back_to_books'), books_path %>
-  <%= button_to t('books.destroy_book'), @book, method: :delete %>
+  <%= link_to t('common.edit'), edit_book_path(@book) %> |
+  <%= link_to t('common.back'), books_path %>
+  <%= button_to t('common.destroy'), @book, method: :delete %>
 </nav>

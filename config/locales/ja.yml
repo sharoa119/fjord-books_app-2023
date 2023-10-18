@@ -1,14 +1,14 @@
 ---
 ja:
-    books:
+    common:
         notice: お知らせ
-        heading: 本の一覧
-        show_book: 本の詳細
-        new_book: 新規作成
-        edit_book: 編集
-        editing_book: 編集する
-        back_to_books: 一覧に戻る
-        destroy_book: 削除
+        heading: 一覧
+        show: 詳細
+        new: 新規作成
+        edit: 編集
+        editing: 編集する
+        back: 一覧に戻る
+        destroy: 削除
     activerecord:
         models:
             book: 本

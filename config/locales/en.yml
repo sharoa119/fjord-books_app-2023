@@ -30,15 +30,15 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-    books:
+    common:
         notice: Notice
-        heading: Books
-        show_book: show the book
-        new_book: create new
-        edit_book: edit
-        editing_book: book editing
-        back_to_books: back to books
-        destroy_book: delete
+        heading: List
+        show: list details
+        new: create new
+        edit: edit
+        editing: editing
+        back: back to list
+        destroy: delete
     activerecord:
         models:
             book: Book

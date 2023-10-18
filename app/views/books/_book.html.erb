@@ -1,21 +1,21 @@
 <div id="<%= dom_id book %>">
   <p>
-    <strong><%= t('activerecord.attributes.book.title') %>:</strong>
+    <strong><%= Book.human_attribute_name :title %>:</strong>
     <%= book.title %>
   </p>
 
   <p>
-    <strong><%= t('activerecord.attributes.book.memo') %>:</strong>
+    <strong><%= Book.human_attribute_name :memo %>:</strong>
     <%= book.memo %>
   </p>
 
   <p>
-    <strong><%= t('activerecord.attributes.book.author') %>:</strong>
+    <strong><%= Book.human_attribute_name :author %>:</strong>
     <%= book.author %>
   </p>
 
   <p>
-    <strong><%= t('activerecord.attributes.book.picture') %>:</strong>
+    <strong><%= Book.human_attribute_name :picture %>:</strong>
     <%= image_tag(book.picture_url) if book.picture.present? %>
   </p>
 
