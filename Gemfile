@@ -80,4 +80,7 @@ group :test do
   gem 'selenium-webdriver'
 end
 
+gem 'bootstrap', '~> 5.3.0'
+gem 'bootstrap5-kaminari-views'
 gem 'carrierwave'
+gem 'kaminari'
