@@ -1,0 +1,21 @@
+---
+ja:
+    common:
+        notice: お知らせ
+        heading: 一覧
+        show: 詳細
+        new: 新規作成
+        edit: 編集
+        editing: 編集する
+        back: 一覧に戻る
+        destroy: 削除
+    activerecord:
+        models:
+            book: 本
+        attributes:
+            book:
+                title: タイトル
+                memo: メモ
+                author: 著作者
+                picture: 表紙
+  

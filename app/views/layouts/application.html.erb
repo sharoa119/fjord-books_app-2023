@@ -12,5 +12,10 @@
 
   <body class="<%= params[:action] %>">
     <%= yield %>
+    <div id="language-switcher">
+    <br>
+      <%= link_to "English", url_for(locale: "en") %>
+      <%= link_to "日本語", url_for(locale: "ja") %>
+    </div>
   </body>
 </html>

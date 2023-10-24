@@ -30,4 +30,22 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+    common:
+        notice: Notice
+        heading: List
+        show: list details
+        new: create new
+        edit: edit
+        editing: editing
+        back: back to list
+        destroy: delete
+    activerecord:
+        models:
+            book: Book
+        attributes:
+            book:
+                title: Title
+                memo: Memo
+                author: Author
+                picture: Picture
+# hello: "Hello world"
