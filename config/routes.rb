@@ -1,5 +1,6 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
-  get 'pages/index'
   devise_for :users, controllers: {
     registrations: 'users/registrations',
     sessions: 'users/sessions'
@@ -7,6 +8,10 @@ Rails.application.routes.draw do
   resources :books
   resources :users, only: %i[index show]
   root 'pages#index'
+
+  get 'books', to: 'books#index'
+  get 'users', to: 'users#index'
+
   devise_scope :user do
     get 'user/:id', to: 'users/registrations#detail'
     get 'signup', to: 'users/registrations#new'

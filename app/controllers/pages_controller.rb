@@ -2,7 +2,7 @@
 
 class PagesController < ApplicationController
   def index
-    @books = Book.all
-    @users = User.all
+    # @books = Book.all
+    # @users = User.all
   end
 end
