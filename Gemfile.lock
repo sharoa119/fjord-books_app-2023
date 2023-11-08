@@ -69,8 +69,6 @@ GEM
     addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
-    autoprefixer-rails (10.4.15.0)
-      execjs (~> 2)
     bcrypt (3.1.19)
     better_html (2.0.2)
       actionview (>= 6.0)
@@ -111,6 +109,8 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    devise-i18n (1.12.0)
+      devise (>= 4.9.0)
     erb_lint (0.4.0)
       activesupport
       better_html (>= 2.0.1)
@@ -308,6 +308,7 @@ DEPENDENCIES
   carrierwave
   debug
   devise
+  devise-i18n
   erb_lint
   faker
   i18n_generators

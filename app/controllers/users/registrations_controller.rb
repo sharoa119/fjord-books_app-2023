@@ -41,6 +41,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @user = User.find_by(id: params[:id])
   end
 
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:account_update, keys: [:name])
+  end
+
   # protected
 
   # If you have extra params to permit, append them to the sanitizer.
