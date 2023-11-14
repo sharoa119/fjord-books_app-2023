@@ -13,6 +13,21 @@
   <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
 </div>
 
+<div class="field">
+  <%= f.label :zip_code %> <br />
+  <%= f.text_field :zip_code %>
+</div>
+
+<div class="field">
+  <%= f.label :address %> <br />
+  <%= f.text_field :address %>
+</div>
+
+<div class="field">
+  <%= f.label :bio %> <br />
+  <%= f.text_area :bio %>
+</div>
+
 <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
 <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
 <% end %>
