@@ -10,8 +10,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
-    <%= stylesheet_link_tag "application", "custom", "data-turbo-track": "reload" %>
+    <%# <%= stylesheet_link_tag "application", "custom", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "custom" %>
     <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "application" %>
   </head>
 
   <body>
@@ -23,14 +25,14 @@
             <%= link_to 'Edit profile', edit_user_registration_path %>
           </li>
           <li>
-            <%= link_to 'Logout', destroy_user_session_path, method: :delete %>
+            <%= link_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete } %>
           </li>
         </ul>
       <% else %>
         <span>Not login now.</span>
         <ul>
           <li>
-            <%= link_to "Login", new_user_session_path, class: 'post' %>
+            <%= link_to "Log in", new_user_session_path, class: 'post' %>
           </li>
           <li>
             <%= link_to "Sign up", new_user_registration_path, class: 'post' %>

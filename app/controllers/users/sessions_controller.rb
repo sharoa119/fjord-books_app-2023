@@ -1,11 +1,19 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
-  def destroy
-    super
 
-    redirect_to new_user_session_path
-  end
+  # protected
+
+  # def after_sign_in_path_for(_resource)
+  #   users_path
+  # end
+
+  # def after_sign_out_path_for(_resource)
+  #   flash[:notice] = 'ログアウトしました' # flashメッセージの追加もできます
+  #   root_path
+  # end
+  #   new_user_session_path
+  # end
   # before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in

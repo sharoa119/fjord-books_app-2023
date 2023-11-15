@@ -8,4 +8,10 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :zip_code, :address, :bio])
     devise_parameter_sanitizer.permit(:account_update, keys: [:name, :zip_code, :address, :bio])
   end
+
+  private
+
+  def after_sign_out_path_for(_resource)
+    new_user_session_path
+  end
 end
