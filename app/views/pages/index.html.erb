@@ -1,11 +1,11 @@
-<h1>Welcome to the Top Page</h1>
+<h1><%= t("views.pages.welcome") %></h1>
 <p>
   <ul>
     <li>
-      <%= link_to 'Book', books_path %>
+      <%= link_to t(Book.model_name.human), books_path %>
     </li>
     <li>
-      <%= link_to 'User', users_path %>
+      <%= link_to t(User.model_name.human), users_path %>
     </li>
   </ul>
 </p>

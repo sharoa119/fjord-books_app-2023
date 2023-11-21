@@ -184,16 +184,22 @@ ja:
   views:
     common:
       show: "この%{name}を表示"
-      edit: "この%{name}を編集"
+      edit: "%{name}を編集"
       destroy: "この%{name}を削除"
       new: "%{name}の新規作成"
-      back: "%{name}の一覧に戻る"
+      back: "%{name}一覧に戻る"
       delete_confirm: よろしいですか？
       title_index: "%{name}の一覧"
       title_new: "%{name}の新規作成"
       title_edit: "%{name}の編集"
       error: エラー
+      table_of_contens: 目次
+      home: "目次に戻る"
+      user_details: "%{name}の詳細"
+      edit_profile: "編集する"
       validation_error: "%{errors}があるため、この%{name}は保存できませんでした"
+    pages:
+      welcome: "ようこそ！"
     pagination:
       first: '« 最初'
       last: '最後 »'

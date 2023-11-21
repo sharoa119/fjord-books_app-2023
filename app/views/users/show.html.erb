@@ -1,32 +1,31 @@
-<h1>User Details Page</h1>
+<h1><%= t("views.common.user_details", name: User.model_name.human) %></h1>
 
 <p>
-  <strong>Name:</strong>
+  <strong><%= t("activerecord.attributes.user.name") %>:</strong>
   <%= @user.name %>
 </p>
 
 <p>
-  <strong>Email:</strong>
+  <strong><%= t("activerecord.attributes.user.email") %>:</strong>
   <%= @user.email %>
 </p>
 
-
 <p>
-  <strong>Zip_code:</strong>
+  <strong><%= t("activerecord.attributes.user.zip_code") %>:</strong>
   <%= @user.zip_code %>
 </p>
 
 <p>
-  <strong>Address:</strong>
+  <strong><%= t("activerecord.attributes.user.address") %>:</strong>
   <%= @user.address %>
 </p>
 
 <p>
-  <strong>Profile:</strong>
+  <strong><%= t("activerecord.attributes.user.bio") %>:</strong>
   <%= @user.bio %>
 </p>
 
 <% if current_user == @user %>
-  <%= link_to 'Edit profile', edit_user_registration_path %> |
+  <%= link_to t("views.common.edit", name: User.model_name.human), edit_user_registration_path %> |
 <% end %>
-<%= link_to 'Back', users_path %>
+<%= link_to t("views.common.back", name: User.model_name.human), users_path %>

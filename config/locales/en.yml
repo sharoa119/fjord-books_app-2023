@@ -227,7 +227,12 @@ en:
       title_new: "New %{name}"
       title_edit: "Editing %{name}"
       error: error
+      table_of_contens: TOC
+      home: Home
+      user details: "User details"
       validation_error: "%{errors} prohibited this %{name} from being saved"
+    pages:
+      welcome: Welcome to the Top Page!
   controllers:
     common:
       notice_create: "%{name} was successfully created."

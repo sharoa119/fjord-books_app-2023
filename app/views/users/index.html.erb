@@ -1,11 +1,9 @@
-<h1>User</h1>
+<h1><%= t("activerecord.models.user") %></h1>
 
 <table>
   <thead>
     <tr>
-      <th>name</th>
-      <%# <th>Email</th>
-      <th></th> %>
+      <th><%= t("activerecord.attributes.user.name") %></th>
     </tr>
   </thead>
 
@@ -13,10 +11,9 @@
     <% @users.each do |user| %>
     <tr>
       <td><%= user.name %></td>
-      <%# <td><%= user.email %>
-      <td><%= link_to 'User details', user %></td>
+      <td><%= link_to t("views.common.show", name: User.model_name.human), user %></td>
     </tr>
     <% end %>
   </tbody>
 </table>
-<li><%= link_to 'Home', root_path %></li>
+<li><%= link_to t("views.common.home"), root_path %></li>

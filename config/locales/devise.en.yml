@@ -20,6 +20,11 @@ en:
       confirmation_instructions:
         subject: "Confirmation instructions"
       reset_password_instructions:
+        action: "Change my password"
+        greeting: "Hello %{recipient}!"
+        instruction: "Someone has requested a link to change your password. You can do this through the link below."
+        instruction_2: "If you didn't request this, please ignore this email."
+        instruction_3: "Your password won't change until you access the link above and create a new one."
         subject: "Reset password instructions"
       unlock_instructions:
         subject: "Unlock instructions"
@@ -46,9 +51,14 @@ en:
       updated: "Your account has been updated successfully."
       updated_but_not_signed_in: "Your account has been updated successfully, but since your password was changed, you need to sign in again."
     sessions:
+      logged in as: "Logged in as #{name}"
+      not_sign_in: "Not Login now."
       signed_in: "Signed in successfully."
       signed_out: "Signed out successfully."
       already_signed_out: "Signed out successfully."
+    shared:
+      links:
+        characters_or_more: "characters or more"
     unlocks:
       send_instructions: "You will receive an email with instructions for how to unlock your account in a few minutes."
       send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."
