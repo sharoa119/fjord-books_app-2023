@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   end
 
   def detail
-    @user = User.find_by(id: params[:id])
+    @user = User.find(params[:id])
   end
 
   def update
@@ -18,8 +18,8 @@ class UsersController < ApplicationController
       bypass_sign_in(resource, scope: resource_name)
       redirect_to after_update_path_for(resource)
     else
-      clean_up_passwords resource
-      set_minimum_password_length
+      # clean_up_passwords resource
+      # set_minimum_password_length
       respond_with resource
     end
   end
