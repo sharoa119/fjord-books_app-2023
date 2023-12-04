@@ -217,7 +217,6 @@ Devise.setup do |config|
   # config.last_attempt_warning = true
 
   # ==> Configuration for :recoverable
-  #
   # Defines which key will be used when recovering the password for an account
   # config.reset_password_keys = [:email]
 
@@ -252,7 +251,7 @@ Devise.setup do |config|
 
   # Set this configuration to false if you want /users/sign_out to sign out
   # only the current scope. By default, Devise signs out all scopes.
-  # config.sign_out_all_scopes = true
+  config.sign_out_all_scopes = true
 
   # ==> Navigation configuration
   # Lists the formats that should be treated as navigational. Formats like
@@ -304,7 +303,7 @@ Devise.setup do |config|
   # Note: These might become the new default in future versions of Devise.
   config.responder.error_status = :unprocessable_entity
   config.responder.redirect_status = :see_other
-  config.authentication_keys = %i[email zip_code address bio]
+  config.authentication_keys = [:email]
   # ==> Configuration for :registerable
 
   # When set to false, does not sign a user in automatically after their password is

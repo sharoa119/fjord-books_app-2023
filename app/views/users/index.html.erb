@@ -11,9 +11,12 @@
     <% @users.each do |user| %>
     <tr>
       <td><%= user.name %></td>
-      <td><%= link_to t("views.common.show", name: User.model_name.human), user %></td>
+      <td><%= link_to t("views.common.details"), user %></td>
     </tr>
     <% end %>
   </tbody>
 </table>
-<li><%= link_to t("views.common.home"), root_path %></li>
+
+<%= paginate @users %>
+
+<%= link_to t("views.common.home"), root_path %>
