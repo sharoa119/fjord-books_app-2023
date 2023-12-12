@@ -1,9 +1,9 @@
-<h1><%= t("activerecord.models.user") %></h1>
+<h1><%= User.model_name.human %></h1>
 
 <table>
   <thead>
     <tr>
-      <th><%= t("activerecord.attributes.user.name") %></th>
+      <th><%= User.human_attribute_name(:name) %></th>
     </tr>
   </thead>
 

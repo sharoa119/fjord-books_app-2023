@@ -1,27 +1,27 @@
 <h1><%= t("views.common.details") %></h1>
 
 <p>
-  <strong><%= t("activerecord.attributes.user.name") %>:</strong>
+  <strong><%= User.human_attribute_name(:name) %>:</strong>
   <%= @user.name %>
 </p>
 
 <p>
-  <strong><%= t("activerecord.attributes.user.email") %>:</strong>
+  <strong><%= User.human_attribute_name(:email) %>:</strong>
   <%= @user.email %>
 </p>
 
 <p>
-  <strong><%= t("activerecord.attributes.user.zip_code") %>:</strong>
+  <strong><%= User.human_attribute_name(:zip_code) %>:</strong>
   <%= @user.zip_code %>
 </p>
 
 <p>
-  <strong><%= t("activerecord.attributes.user.address") %>:</strong>
+  <strong><%= User.human_attribute_name(:address) %>:</strong>
   <%= @user.address %>
 </p>
 
 <p>
-  <strong><%= t("activerecord.attributes.user.bio") %>:</strong>
+  <strong><%= User.human_attribute_name(:bio)%>:</strong>
   <%= @user.bio %>
 </p>
 
