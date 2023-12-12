@@ -332,7 +332,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap
-  bootstrap (~> 5.3.0)
+  bootstrap
   bootstrap5-kaminari-views
   capybara
   carrierwave
