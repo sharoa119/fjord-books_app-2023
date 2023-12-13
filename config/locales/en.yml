@@ -231,6 +231,8 @@ en:
       home: Home
       details: "details"
       validation_error: "%{errors} prohibited this %{name} from being saved"
+      logged in as: "Logged in as #{name}"
+      not_sign_in: "Not Login now."
     pages:
       welcome: Welcome to the Top Page!
   controllers:

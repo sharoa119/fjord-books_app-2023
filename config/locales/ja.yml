@@ -198,6 +198,11 @@ ja:
       details: "詳細"
       edit_profile: "編集する"
       validation_error: "%{errors}があるため、この%{name}は保存できませんでした"
+      logged in as: ”%{name}でログイン中"
+      not_sign_in: "ログインしていません。"
+      sign_in: "ログイン"
+      sign_out: "ログアウト"
+      sign_up: "アカウント登録"
     pages:
       welcome: "ようこそ！"
     pagination:
