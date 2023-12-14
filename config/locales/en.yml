@@ -230,6 +230,7 @@ en:
       validation_error: "%{errors} prohibited this %{name} from being saved"
       title_show: "%{name} details"
       sign_out: "Sign out"
+      content_type: "is something other than JPEG, JPG, PNG, or GIF. Please check the file format."
   controllers:
     common:
       notice_create: "%{name} was successfully created."
