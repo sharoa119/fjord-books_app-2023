@@ -196,7 +196,6 @@ ja:
       validation_error: "%{errors}があるため、この%{name}は保存できませんでした"
       title_show: "%{name}の詳細"
       sign_out: ログアウト
-      content_type: "がJPEG、JPG、PNG、GIF以外のものです。ファイル形式を確認してください。"
     pagination:
       first: '« 最初'
       last: '最後 »'
