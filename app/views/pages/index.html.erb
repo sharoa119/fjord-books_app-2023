@@ -1,0 +1,12 @@
+<h1><%= t("views.pages.welcome") %></h1>
+<h2><%= t("views.common.table_of_contens") %></h2>
+<p>
+  <ul>
+    <li>
+      <%= link_to t(Book.model_name.human), books_path %>
+    </li>
+    <li>
+      <%= link_to t(User.model_name.human), users_path %>
+    </li>
+  </ul>
+</p>

@@ -13,3 +13,20 @@
  *= require_tree .
  *= require_self
  */
+.pagination>li>a {
+  border: none;
+  color: #696969;
+}
+
+.pagination>.active>a {
+  background: #f4aff0;
+  border-radius: 10px;
+}
+
+.pagination>li>a:hover {
+  border-radius: 10px;
+}
+
+.pagination {
+  justify-content: center;
+}

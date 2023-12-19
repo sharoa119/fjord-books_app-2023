@@ -68,6 +68,7 @@ group :development do
   gem 'erb_lint', require: false
   gem 'faker'
   gem 'i18n_generators'
+  gem 'letter_opener_web'
   # 以下のPRがリリースされたら最新のrubocopを使うようにする
   # https://github.com/fjordllc/rubocop-fjord/pull/16
   gem 'rubocop', '~> 1.45.1', require: false
@@ -81,5 +82,11 @@ group :test do
   gem 'selenium-webdriver'
 end
 
+gem 'bootstrap'
+gem 'bootstrap5-kaminari-views'
 gem 'carrierwave'
+gem 'devise'
+gem 'devise-i18n'
 gem 'kaminari'
+gem 'rails-i18n'
+gem 'sassc-rails'
