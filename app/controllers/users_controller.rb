@@ -12,7 +12,12 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @user.image.attach(params[:user][:image])
-    @user.save
+
+    begin
+      @user.save!
+    rescue ActiveRecord::RecordInvalid => e
+      flash[:alert] = "保存に失敗しました。#{e.message}"
+    end
   end
 
   def update
