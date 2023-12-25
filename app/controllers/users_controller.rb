@@ -13,10 +13,10 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.image.attach(params[:user][:image])
 
-    begin
-      @user.save!
-    rescue ActiveRecord::RecordInvalid => e
-      flash[:alert] = "保存に失敗しました。#{e.message}"
+    if @user.save
+      redirect_to @user, notice: 'User was successfully created.'
+    else
+      render :new
     end
   end
 
