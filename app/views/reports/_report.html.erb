@@ -11,7 +11,11 @@
 
   <p>
     <strong>User:</strong>
-    <%= report.user_id %>
+    <%= report.user.name %>
+  </p>
+  <p>
+    <strong><%= Report.human_attribute_name(:created_at) %>:</strong>
+    <%= l report.created_at, format: :short %>
   </p>
 
 </div>

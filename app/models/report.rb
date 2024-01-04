@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
 class Report < ApplicationRecord
-  belongs_to :user
-  validates_presence_of :user
+  belongs_to :user, optional: true
 end

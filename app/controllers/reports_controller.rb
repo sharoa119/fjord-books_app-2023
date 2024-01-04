@@ -2,8 +2,6 @@
 
 class ReportsController < ApplicationController
   before_action :set_report, only: %i[show edit update destroy]
-  before_action :ensure_user, only: %i[edit update destroy]
-  before_action :ensure_user, only: [:new, :create], unless: -> { action_name == 'new' }
 
   # GET /reports or /reports.json
   def index
@@ -15,8 +13,7 @@ class ReportsController < ApplicationController
 
   # GET /reports/new
   def new
-    @user = current_user
-    @report = Report.new
+    @report = current_user.reports.build
   end
 
   # GET /reports/1/edit
@@ -24,13 +21,11 @@ class ReportsController < ApplicationController
 
   # POST /reports or /reports.json
   def create
-    # @report = Report.new(report_params)
-    # @report.user_id = current_user.id
     @report = current_user.reports.build(report_params)
 
     respond_to do |format|
       if @report.save
-        format.html { redirect_to report_url(@report), notice: "Report was successfully created." }
+        format.html { redirect_to report_url(@report), notice: 'Report was successfully created.' }
         format.json { render :show, status: :created, location: @report }
       else
         Rails.logger.debug @report.errors.full_messages
@@ -44,7 +39,7 @@ class ReportsController < ApplicationController
   def update
     respond_to do |format|
       if @report.update(report_params)
-        format.html { redirect_to report_url(@report), notice: "Report was successfully updated." }
+        format.html { redirect_to report_url(@report), notice: 'Report was successfully updated.' }
         format.json { render :show, status: :ok, location: @report }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -65,17 +60,6 @@ class ReportsController < ApplicationController
 
   private
 
-  # def ensure_user
-  # @report = Report.find(params[:id])
-  # redirect_to new_report_path unless @report.user == current_user
-  # end
-
-  def ensure_user
-    @reports = current_user.reports
-    @report = @reports.find_by(id: params[:id])
-    redirect_to new_report_path unless @report
-  end
-
   # Use callbacks to share common setup or constraints between actions.
   def set_report
     @report = Report.find(params[:id])
@@ -83,7 +67,6 @@ class ReportsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def report_params
-    # params.require(:report).permit(:title, :content).merge(user_id: current_user.id)
     params.require(:report).permit(:title, :content).merge(user_id: current_user.id)
   end
 end
