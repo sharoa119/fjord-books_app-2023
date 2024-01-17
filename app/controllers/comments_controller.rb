@@ -2,41 +2,29 @@
 
 class CommentsController < ApplicationController
   before_action :set_commentable
-  before_action :set_comment, only: %i[show edit update destroy]
-
-  # GET /comments or /comments.json
-  def index
-    @comments = @commentable.comments.all
-  end
-
-  # GET /comments/1 or /comments/1.json
-  def show; end
+  before_action :set_comment, only: %i[destroy]
 
   # GET /comments/new
   def new
     @comment = @commentable.comments.build
   end
 
-  # GET /comments/1/edit
-  def edit; end
-
   # POST /comments or /comments.json
   def create
-    @comment = @commentable.comments.build(comment_params.merge(user: current_user))
+    begin
+      @comment = @commentable.comments.build(comment_params)
+      @comment.user_id = current_user.id
 
-    if @comment.save
+      ActiveRecord::Base.transaction do
+        @comment.save!
+      end
+
+      flash[:success] = 'コメントしました'
       redirect_to @commentable, notice: 'Comment was successfully created.'
-    else
+    rescue => e
+      Rails.logger.debug e.message
+      flash[:error] = 'コメントできませんでした'
       render :new
-    end
-  end
-
-  # PATCH/PUT /comments/1 or /comments/1.json
-  def update
-    if @comment.update(comment_params)
-      redirect_to @commentable, notice: 'Comment was successfully updated.'
-    else
-      render :edit
     end
   end
 
@@ -50,10 +38,12 @@ class CommentsController < ApplicationController
 
   def set_commentable
     if params[:report_id]
-      @commentable = Report.find(params[:report_id])
+      @commentable = Report.find_by(id: params[:report_id])
     elsif params[:book_id]
-      @commentable = Book.find(params[:book_id])
+      @commentable = Book.find_by(id: params[:book_id])
     end
+
+    redirect_to(reports_path, alert: 'Commentable not found') unless @commentable
   end
 
   def set_comment
@@ -61,6 +51,6 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:body)
+    params.require(:comment).permit(:content).merge(user_id: current_user.id)
   end
 end

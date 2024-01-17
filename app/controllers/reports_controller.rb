@@ -5,11 +5,16 @@ class ReportsController < ApplicationController
 
   # GET /reports or /reports.json
   def index
-    @reports = Report.order(:id)
+    @reports = Report.order(created_at: 'DESC').includes(:user).all.page(params[:page])
   end
 
   # GET /reports/1 or /reports/1.json
-  def show; end
+  def show
+    set_report
+    @commentable = @report
+    @comments = @commentable.comments
+    @comment = Comment.new
+  end
 
   # GET /reports/new
   def new

@@ -1,10 +1,18 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @comment %>
+<h2>Comments</h2>
+  <% if @comments.any? %>
+    <% @comments.each do |comment| %>
+    <%= render @comment %>
 
-<div>
-  <%= link_to "Edit this comment", edit_comment_path(@comment) %> |
-  <%= link_to "Back to comments", comments_path %>
+      <div>
+        <% if @comment.user == current_user %>
+          <%= button_to "Destroy this comment", @comment, method: :delete %>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>No comments available.</p>
+  <% end %>
 
-  <%= button_to "Destroy this comment", @comment, method: :delete %>
-</div>
+<%= link_to "New Comment", new_report_comment_path(@report) %>

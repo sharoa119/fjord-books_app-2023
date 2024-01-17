@@ -1,5 +1,7 @@
 <%= render @report %>
 
+<%= render 'comments/comment', commentable: @report, current_user: current_user %>
+
 <div>
   <% if @report.user == current_user %>
     <%= link_to "Edit this report", edit_report_path(@report) %> |

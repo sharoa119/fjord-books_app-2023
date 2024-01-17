@@ -1,2 +1,13 @@
-<div id="<%= dom_id comment %>">
-</div>
+<h2>Comments</h2>
+  <% @comments.includes(:user).each do |comment| %>
+    <div>
+      <strong>User:</strong> <%= comment_user_display(comment) %> / 
+      <strong>Content:</strong> <%= comment.content %> /
+      <strong>Posted at:</strong> <%= l comment.created_at, format: :short %>
+      <% if comment.user == current_user %>
+        <%= link_to "Destroy this comment", [@commentable, comment], method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  <% end %>
+
+<%= render "comments/form", comment: @comment %>
