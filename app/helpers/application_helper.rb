@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
-  def comment_user_display(comment)
-    comment.user.name.empty? ? comment.user.email : comment.user.name
-  end
   # localeに応じて複数形の表記を変える
   # - 日本語の場合 => 本
   # - 英語の場合 => books

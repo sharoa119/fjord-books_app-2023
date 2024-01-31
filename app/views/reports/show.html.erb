@@ -4,8 +4,9 @@
 
 <div>
   <% if @report.user == current_user %>
-    <%= link_to "Edit this report", edit_report_path(@report) %> |
-    <%= link_to "Destroy this report", @report, method: :delete %>
+    <%= link_to "Edit this report", edit_report_path(@report) %>
+
+    <%= button_to "Destroy this report", @report, method: :delete %>
   <% end %>
 </div>
 
