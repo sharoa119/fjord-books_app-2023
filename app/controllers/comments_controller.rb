@@ -19,6 +19,13 @@ class CommentsController < ApplicationController
     end
   end
 
+  def destroy
+    @comment = @commentable.comments.find(params[:id])
+
+    @comment.destroy
+    redirect_back(fallback_location: @commentable)
+  end
+
   private
 
   def comment_params

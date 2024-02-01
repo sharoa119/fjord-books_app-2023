@@ -1,7 +1,7 @@
 <h2><%= Comment.model_name.human %></h2>
   <% @comments.includes(:user).each do |comment| %>
     <div>
-      <strong><%= Comment.human_attribute_name(:name) %>:</strong> <%= comment.name.empty? ? comment.user&.email : comment.name %> / 
+      <strong><%= Comment.human_attribute_name(:name) %>:</strong> <%= comment.name.empty? ? comment.user&.email : comment.name %> /
       <strong><%= Comment.human_attribute_name(:content) %>:</strong> <%= comment.content %> /
       <strong><%= Comment.human_attribute_name(:date) %>:</strong> <%= l comment.created_at, format: :short %>
       <% if comment.user == current_user %>
