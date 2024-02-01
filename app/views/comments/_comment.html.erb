@@ -1,11 +1,11 @@
-<h2>Comments</h2>
+<h2><%= Comment.model_name.human %></h2>
   <% @comments.includes(:user).each do |comment| %>
     <div>
-      <strong>User:</strong> <%= comment.name.empty? ? comment.user&.email : comment.name %> / 
-      <strong>Content:</strong> <%= comment.content %> /
-      <strong>Posted at:</strong> <%= l comment.created_at, format: :short %>
+      <strong><%= Comment.human_attribute_name(:name) %>:</strong> <%= comment.name.empty? ? comment.user&.email : comment.name %> / 
+      <strong><%= Comment.human_attribute_name(:content) %>:</strong> <%= comment.content %> /
+      <strong><%= Comment.human_attribute_name(:date) %>:</strong> <%= l comment.created_at, format: :short %>
       <% if comment.user == current_user %>
-        <%= button_to "Destroy this comment", [@commentable, comment], method: :delete %>
+        <%= button_to t('views.common.destroy', name: Comment.model_name.human.downcase), [@commentable, comment], method: :delete %>
       <% end %>
     </div>
   <% end %>

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
-
   # GET /comments/new
   def new
     @comment = @commentable.comments.build
@@ -14,7 +13,7 @@ class CommentsController < ApplicationController
     @comment.user = current_user
 
     if @comment.save
-      redirect_to @commentable, notice: 'Comment was successfully created.'
+      redirect_to @commentable, notice: t('controllers.common.notice_create', name: Comment.model_name.human)
     else
       render :new
     end

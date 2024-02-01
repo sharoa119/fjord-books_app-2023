@@ -2,7 +2,7 @@
 
   <% if comment.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
+      <h2><%= t('views.common.validation_error', errors: i18n_error_count(Comment.errors.count), name: Comment.model_name.human.downcase) %>:</h2>
 
       <ul>
         <% comment.errors.each do |error| %>
@@ -17,6 +17,7 @@
     <%= form.text_field :name, class: "form-control" %>
   </div>
   <div>
+    <%= form.label :content %>
     <%= form.text_area :content, class: "form-control", rows: 5, required: true %>
     <%= button_tag type: "submit", class: "btn btn-success float-right mt-1" do %>
       <i class="far fa-comments"></i> コメントする
