@@ -13,6 +13,7 @@
     <strong><%= Report.human_attribute_name(:user) %>:</strong>
     <%= report.user.name %>
   </p>
+  
   <p>
     <strong><%= Report.human_attribute_name(:post_date) %>:</strong>
     <%= l report.created_at, format: :short %>
