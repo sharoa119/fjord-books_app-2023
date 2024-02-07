@@ -13,10 +13,6 @@
   <% end %>
 
   <div>
-    <%= form.label :name %>
-    <%= form.text_field :name, class: "form-control" %>
-  </div>
-  <div>
     <%= form.label :content %>
     <%= form.text_area :content, class: "form-control", rows: 5, required: true %>
     <%= button_tag type: "submit", class: "btn btn-success float-right mt-1" do %>

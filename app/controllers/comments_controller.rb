@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
+  before_action :authorize_comment_user, only: [:destroy]
   # GET /comments/new
   def new
     @comment = @commentable.comments.build
-    @comment.user = current_user
   end
 
   # POST /comments or /comments.json
@@ -27,6 +27,12 @@ class CommentsController < ApplicationController
   end
 
   private
+
+  def authorize_comment_user
+    return if current_user == @comment.user
+
+    redirect_back(fallback_location: @commentable, alert: t('controllers.common.alert'))
+  end
 
   def comment_params
     params.require(:comment).permit(:name, :content)
