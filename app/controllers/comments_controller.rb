@@ -23,18 +23,18 @@ class CommentsController < ApplicationController
     @comment = @commentable.comments.find(params[:id])
 
     @comment.destroy
-    redirect_back(fallback_location: @commentable)
+    redirect_to @commentable, notice: t('controllers.common.notice_destroy', name: Comment.model_name.human)
   end
 
   private
 
   def authorize_comment_user
-    return if current_user == @comment.user
+    return if @comment.nil? || current_user == @comment.user
 
-    redirect_back(fallback_location: @commentable, alert: t('controllers.common.alert'))
+    redirect_to @commentable, alert: t('controllers.common.alert')
   end
 
   def comment_params
-    params.require(:comment).permit(:name, :content)
+    params.require(:comment).permit(:content)
   end
 end
