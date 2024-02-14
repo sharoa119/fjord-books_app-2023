@@ -1,0 +1,13 @@
+<h2><%= Comment.model_name.human %></h2>
+  <% @comments.includes(:user).each do |comment| %>
+    <div>
+      <strong><%= Comment.human_attribute_name(:name) %>:</strong> <%= comment.user.name.present? ? comment.user.name : comment.user.email %> /
+      <strong><%= Comment.human_attribute_name(:content) %>:</strong> <%= comment.content %> /
+      <strong><%= Comment.human_attribute_name(:date) %>:</strong> <%= l comment.created_at, format: :short %>
+      <% if comment.user == current_user %>
+        <%= button_to t('views.common.destroy', name: Comment.model_name.human.downcase), [@commentable, comment], method: :delete %>
+      <% end %>
+    </div>
+  <% end %>
+
+<%= render "comments/form", comment: @comment %>
