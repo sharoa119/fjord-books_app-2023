@@ -1,0 +1,14 @@
+<% if mention_type == 'mentioning' %>
+  <div class="mentions-container">
+    <h3><%= t('.mentioned') %></h3>
+    <% if reports.any? %>
+      <ul>
+        <% reports.each do |mention_rpt| %>
+          <li>
+            <%= link_to mention_rpt.title, mention_rpt %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+<% end %>
