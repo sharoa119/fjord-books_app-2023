@@ -1,3 +1,14 @@
+<% if @report.errors.any? %>
+  <div class="alert alert-danger">
+    <h2><%= pluralize(@report.errors.count, "error") %> prohibited this report from being saved:</h2>
+    <ul>
+      <% @report.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 <h1><%= t('views.common.title_edit', name: Report.model_name.human) %></h1>
 
 <%= render "form", report: @report %>

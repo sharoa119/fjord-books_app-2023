@@ -30,20 +30,19 @@ class Report < ApplicationRecord
     created_at.to_date
   end
 
-  def save_with_mentions
-    # トランザクションを開始
+  def save_or_update_with_mentions(report_params)
     ActiveRecord::Base.transaction do
-      # 日報を保存
-      save!
+      if new_record?
+        save!
+      else
+        update!(report_params)
+      end
 
-      # 言及データを保存
       detect_mentions
     end
   rescue StandardError => e
-    # トランザクション内でのエラーが発生した場合の処理
-    # エラーのハンドリングやログ出力などが必要
-    logger.error "Failed to save report with mentions: #{e.message}"
-    raise e
+    logger.error "Failed to save or update report with mentions: #{e.message}"
+    raise ActiveRecord::Rollback
   end
 
   private
@@ -52,11 +51,22 @@ class Report < ApplicationRecord
     # 正規表現パターンを定義（http://localhost:3000/reports/123 のようなURLを抽出）
     url_pattern = %r{(http|https)://(?:localhost|127\.0\.0\.1):3000/reports/(\d+)}
 
-    # 本文テキストからURLを抽出し、それぞれの日報を取得して mentioned_reports に追加する
-    content.scan(url_pattern) do |match|
-      report_id = match[1].to_i
+    # 本文テキストからすべてのURLを抽出
+    mentioned_report_ids = content.scan(url_pattern).map { |match| match[1].to_i }
+
+    mentioned_reports = []
+    mentioned_report_ids.each do |report_id|
       report = Report.find_by(id: report_id)
-      mentioned_reports << report if report
+
+      unless report
+        error_message = "メンション先の日報（ID: #{report_id}）が見つかりませんでした。"
+        errors.add(:base, error_message)
+        return false
+      end
+
+      mentioned_reports << report
     end
+
+    true
   end
 end
