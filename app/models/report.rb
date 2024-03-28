@@ -22,39 +22,23 @@ class Report < ApplicationRecord
   end
 
   def save_with_mentions(report_ids)
-    if report_ids.present? && !mentioning_report_ids_valid?
-      errors.add(:base, 'メンション先の日報が見つかりませんでした。')
-      return false
-    elsif !save
-      return false
-    elsif report_ids.present?
+    if report_ids.present? && mentioning_reports_valid?(report_ids)
       create_mentions(report_ids)
-    end
-    true
-  end
-
-  def create_with_mentions(report_ids)
-    if mentioning_report_ids_valid?
-      save_with_mentions(report_ids)
-    else
       save
+    else
+      errors.add(:base, 'メンション先の日報が見つかりませんでした。')
+      false
     end
   end
 
   def update_with_mentions(params, report_ids)
     ActiveRecord::Base.transaction do
-      if update(params)
-        mentioning_reports = Report.where(id: report_ids)
-
-        if mentioning_reports.size == report_ids.size
-          update_mentions(self, report_ids)
-          true
-        else
-          errors.add(:base, 'メンション先の日報が見つかりませんでした。')
-          raise ActiveRecord::Rollback
-        end
+      if update(params) && mentioning_reports_valid?(report_ids)
+        update_mentions(self, report_ids)
+        true
       else
-        false
+        errors.add(:base, 'メンション先の日報が見つかりませんでした。')
+        raise ActiveRecord::Rollback
       end
     end
   end
@@ -64,18 +48,26 @@ class Report < ApplicationRecord
     destroy
   end
 
+  private
+
+  def mentioning_reports_valid?(report_ids)
+    mentioning_report_ids(report_ids).all? do |report_id|
+      Report.exists?(report_id)
+    end
+  end
+
+  def mentioning_report_ids(report_ids)
+    report_ids.reject { |id| id == self.id }
+  end
+
   def create_mentions(report_ids)
     report_ids.each do |id|
-      next if id == self.id
-
       mention = mentioning_relationships.build(mentioned_report_id: id)
       mention.save
     end
   end
 
   def delete_mentions(report_ids)
-    return unless id
-
     Mention.where(mentioning_report_id: id, mentioned_report_id: report_ids).destroy_all
   end
 
@@ -84,16 +76,10 @@ class Report < ApplicationRecord
     ids_to_create = report_ids - old_report_ids
     ids_to_delete = old_report_ids - report_ids
 
-    ids_to_create.reject! { |id| id == self.id }
-    ids_to_delete.reject! { |id| id == self.id }
+    ids_to_create = mentioning_report_ids(ids_to_create)
+    ids_to_delete = mentioning_report_ids(ids_to_delete)
 
     create_mentions(ids_to_create)
     delete_mentions(ids_to_delete)
-  end
-
-  def mentioning_report_ids_valid?
-    mentioning_report_ids.all? do |report_id|
-      Report.exists?(report_id)
-    end
   end
 end

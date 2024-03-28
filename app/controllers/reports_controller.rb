@@ -21,9 +21,8 @@ class ReportsController < ApplicationController
 
   def create
     @report = current_user.reports.new(report_params)
-    report_ids = mentioning_report_ids
 
-    if @report.create_with_mentions(report_ids)
+    if @report.save_with_mentions(mentioning_report_ids)
       redirect_to @report, notice: t('controllers.common.notice_create', name: Report.model_name.human)
     else
       flash[:alert] = @report.errors.full_messages.join(', ')
