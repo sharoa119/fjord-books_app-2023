@@ -7,20 +7,11 @@ class Report < ApplicationRecord
   validates :title, presence: true
   validates :content, presence: true
 
-  # mentionする側
   has_many :mentioning_relationships, class_name: 'Mention', foreign_key: 'mentioning_report_id', dependent: :destroy, inverse_of: :mentioning_report
-  # その日報が言及している日報たち（言及先）
-  # has_many ：関連名, through: :中間テーブル名, sources: :取得したい関連先
   has_many :mentioning_reports, through: :mentioning_relationships, source: :mentioned_report
 
-  # mentionされる側
   has_many :mentioned_relationships, class_name: 'Mention', foreign_key: 'mentioned_report_id', dependent: :destroy, inverse_of: :mentioned_report
-  # その日報に言及している日報たち（言及元）
-  # has_many ：関連名, through: :中間テーブル名, sources: :取得したい関連先
   has_many :mentioned_reports, through: :mentioned_relationships, source: :mentioning_report
-
-  # 日報が保存されるときに言及を検出する
-  before_save :detect_mentions
 
   def editable?(target_user)
     user == target_user
@@ -30,43 +21,79 @@ class Report < ApplicationRecord
     created_at.to_date
   end
 
-  def save_or_update_with_mentions(report_params)
-    ActiveRecord::Base.transaction do
-      if new_record?
-        save!
-      else
-        update!(report_params)
-      end
-
-      detect_mentions
+  def save_with_mentions(report_ids)
+    if report_ids.present? && !mentioning_report_ids_valid?
+      errors.add(:base, 'メンション先の日報が見つかりませんでした。')
+      return false
+    elsif !save
+      return false
+    elsif report_ids.present?
+      create_mentions(report_ids)
     end
-  rescue StandardError => e
-    logger.error "Failed to save or update report with mentions: #{e.message}"
-    raise ActiveRecord::Rollback
+    true
   end
 
-  private
-
-  def detect_mentions
-    # 正規表現パターンを定義（http://localhost:3000/reports/123 のようなURLを抽出）
-    url_pattern = %r{(http|https)://(?:localhost|127\.0\.0\.1):3000/reports/(\d+)}
-
-    # 本文テキストからすべてのURLを抽出
-    mentioned_report_ids = content.scan(url_pattern).map { |match| match[1].to_i }
-
-    mentioned_reports = []
-    mentioned_report_ids.each do |report_id|
-      report = Report.find_by(id: report_id)
-
-      unless report
-        error_message = "メンション先の日報（ID: #{report_id}）が見つかりませんでした。"
-        errors.add(:base, error_message)
-        return false
-      end
-
-      mentioned_reports << report
+  def create_with_mentions(report_ids)
+    if mentioning_report_ids_valid?
+      save_with_mentions(report_ids)
+    else
+      save
     end
+  end
 
-    true
+  def update_with_mentions(params, report_ids)
+    ActiveRecord::Base.transaction do
+      if update(params)
+        mentioning_reports = Report.where(id: report_ids)
+
+        if mentioning_reports.size == report_ids.size
+          update_mentions(self, report_ids)
+          true
+        else
+          errors.add(:base, 'メンション先の日報が見つかりませんでした。')
+          raise ActiveRecord::Rollback
+        end
+      else
+        false
+      end
+    end
+  end
+
+  def destroy_with_mentions(report_ids)
+    delete_mentions(report_ids)
+    destroy
+  end
+
+  def create_mentions(report_ids)
+    report_ids.each do |id|
+      next if id == self.id
+
+      mention = mentioning_relationships.build(mentioned_report_id: id)
+      mention.save
+    end
+  end
+
+  def delete_mentions(report_ids)
+    return unless id
+
+    Mention.where(mentioning_report_id: id, mentioned_report_id: report_ids).destroy_all
+  end
+
+  def update_mentions(report, report_ids)
+    old_report_ids = report.mentioning_relationships.pluck(:mentioned_report_id)
+    ids_to_create = report_ids - old_report_ids
+    ids_to_delete = old_report_ids - report_ids
+
+    ids_to_create.reject! { |id| id == self.id }
+    ids_to_delete.reject! { |id| id == self.id }
+
+    create_mentions(ids_to_create)
+    delete_mentions(ids_to_delete)
+  end
+
+  def mentioning_report_ids_valid?
+    mentioning_report_ids.all? do |report_id|
+      Report.exists?(report_id)
+    end
   end
 end

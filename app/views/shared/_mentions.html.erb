@@ -1,14 +1,12 @@
-<% if mention_type == 'mentioning' %>
+<% if @mentions.present? %>
   <div class="mentions-container">
     <h3><%= t('.mentioned') %></h3>
-    <% if reports.any? %>
-      <ul>
-        <% reports.each do |mention_rpt| %>
-          <li>
-            <%= link_to mention_rpt.title, mention_rpt %>
-          </li>
-        <% end %>
-      </ul>
-    <% end %>
+    <ul>
+      <% @mentions.each do |mention_rp| %>
+        <li>
+          <%= link_to mention_rp.title, mention_rp %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 <% end %>

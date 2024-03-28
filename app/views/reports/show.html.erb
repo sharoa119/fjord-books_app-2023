@@ -5,13 +5,7 @@
 </div>
 
 <%= render 'shared/comments', commentable: @report %>
-<% if @mentioning_reports.present? %>
-  <%= render 'shared/mentions', mention_type: 'mentioning', reports: @mentioning_reports %>
-<% end %>
-
-<% if @mentioned_reports.present? %>
-  <%= render 'shared/mentions', mention_type: 'mentioned', reports: @mentioned_reports %>
-<% end %>
+<%= render 'shared/mentions', reports: @report %>
 
 <nav class="page-nav">
   <% if @report.editable?(current_user) %>
