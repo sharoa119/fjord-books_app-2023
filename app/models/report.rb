@@ -22,22 +22,28 @@ class Report < ApplicationRecord
   end
 
   def save_with_mentions(report_ids)
-    if report_ids.present? && mentioning_reports_valid?(report_ids)
+    return unless report_ids.present? && mentioning_reports_valid?(report_ids)
+
+    ActiveRecord::Base.transaction do
+      save!
       create_mentions(report_ids)
-      save
-    else
-      errors.add(:base, 'メンション先の日報が見つかりませんでした。')
-      false
+    rescue ActiveRecord::RecordInvalid
+      errors.add(:base, t('controllers.error.error_create', name: Report.model_name.human))
+      raise ActiveRecord::Rollback
     end
+    # if report_ids.present? && mentioning_reports_valid?(report_ids)
+    #   create_mentions(report_ids)
+    #   save
+    # end
   end
 
   def update_with_mentions(params, report_ids)
     ActiveRecord::Base.transaction do
-      if update(params) && mentioning_reports_valid?(report_ids)
-        update_mentions(self, report_ids)
+      if update(params)
+        update_mentions(self, report_ids) if mentioning_reports_valid?(report_ids)
         true
       else
-        errors.add(:base, 'メンション先の日報が見つかりませんでした。')
+        errors.add(:base, t('controllers.error.error_update', name: Report.model_name.human))
         raise ActiveRecord::Rollback
       end
     end
@@ -46,6 +52,14 @@ class Report < ApplicationRecord
   def destroy_with_mentions(report_ids)
     delete_mentions(report_ids)
     destroy
+  end
+
+  def self.mentioning_report_ids(content)
+    return [] if content.blank?
+
+    urls = content.scan(%r{\bhttps?://\S+\b})
+
+    urls.map { |url| extract_report_id_from_url(url) }.uniq
   end
 
   private
@@ -81,5 +95,10 @@ class Report < ApplicationRecord
 
     create_mentions(ids_to_create)
     delete_mentions(ids_to_delete)
+  end
+
+  def extract_report_id_from_url(url)
+    match = url.match(%r{/reports/(\d+)})
+    match[1].to_i if match
   end
 end
