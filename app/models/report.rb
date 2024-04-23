@@ -22,19 +22,15 @@ class Report < ApplicationRecord
   end
 
   def save_with_mentions(report_ids)
-    return unless report_ids.present? && mentioning_reports_valid?(report_ids)
-
     ActiveRecord::Base.transaction do
-      save!
-      create_mentions(report_ids)
-    rescue ActiveRecord::RecordInvalid
-      errors.add(:base, t('controllers.error.error_create', name: Report.model_name.human))
-      raise ActiveRecord::Rollback
+      if save
+        create_mentions(report_ids) if report_ids.present?
+        true
+      else
+        errors.add(:base, t('controllers.error.error_create', name: Report.model_name.human))
+        raise ActiveRecord::Rollback
+      end
     end
-    # if report_ids.present? && mentioning_reports_valid?(report_ids)
-    #   create_mentions(report_ids)
-    #   save
-    # end
   end
 
   def update_with_mentions(params, report_ids)
@@ -54,7 +50,12 @@ class Report < ApplicationRecord
     destroy
   end
 
-  def self.mentioning_report_ids(content)
+  def extract_report_id_from_url(url)
+    match = url.match(%r{/reports/(\d+)})
+    match[1].to_i if match
+  end
+
+  def mentioning_report_ids(content)
     return [] if content.blank?
 
     urls = content.scan(%r{\bhttps?://\S+\b})
@@ -65,12 +66,12 @@ class Report < ApplicationRecord
   private
 
   def mentioning_reports_valid?(report_ids)
-    mentioning_report_ids(report_ids).all? do |report_id|
+    exclude_my_report_id(report_ids).all? do |report_id|
       Report.exists?(report_id)
     end
   end
 
-  def mentioning_report_ids(report_ids)
+  def exclude_my_report_id(report_ids)
     report_ids.reject { |id| id == self.id }
   end
 
@@ -86,19 +87,16 @@ class Report < ApplicationRecord
   end
 
   def update_mentions(report, report_ids)
+    current_report_ids = report_ids.map(&:to_i)
     old_report_ids = report.mentioning_relationships.pluck(:mentioned_report_id)
-    ids_to_create = report_ids - old_report_ids
-    ids_to_delete = old_report_ids - report_ids
 
-    ids_to_create = mentioning_report_ids(ids_to_create)
-    ids_to_delete = mentioning_report_ids(ids_to_delete)
+    ids_to_create = current_report_ids - old_report_ids
+    ids_to_create.each do |id|
+      mention = mentioning_relationships.build(mentioned_report_id: id)
+      mention.save
+    end
 
-    create_mentions(ids_to_create)
-    delete_mentions(ids_to_delete)
-  end
-
-  def extract_report_id_from_url(url)
-    match = url.match(%r{/reports/(\d+)})
-    match[1].to_i if match
+    ids_to_delete = old_report_ids - current_report_ids
+    Mention.where(mentioning_report_id: report.id, mentioned_report_id: ids_to_delete).destroy_all
   end
 end
