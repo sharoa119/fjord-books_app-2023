@@ -24,7 +24,7 @@ class Report < ApplicationRecord
   def save_with_mentions
     ActiveRecord::Base.transaction do
       if save
-        create_mentions(mentioning_report_ids(content)) if content.present?
+        create_mentions(mentioning_report_ids(content))
         true
       else
         errors.add(:base, t('controllers.error.error_create', name: Report.model_name.human))
@@ -50,8 +50,6 @@ class Report < ApplicationRecord
   end
 
   def mentioning_report_ids(content)
-    return [] if content.blank?
-
     urls = content.scan(%r{\bhttps?://\S+\b})
 
     urls.map { |url| extract_report_id_from_url(url) }.uniq
