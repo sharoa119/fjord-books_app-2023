@@ -35,6 +35,8 @@ class Report < ApplicationRecord
 
   def update_with_mentions(params)
     ActiveRecord::Base.transaction do
+      mentioning_reports.destroy_all
+
       if update(params)
         save_with_mentions
       else
@@ -59,6 +61,9 @@ class Report < ApplicationRecord
 
   def create_mentions(report_ids)
     report_ids.each do |id|
+      report = Report.find_by(id:)
+      next unless report && report != self
+
       mentioning.create!(mentioned_report_id: id)
     end
   end
