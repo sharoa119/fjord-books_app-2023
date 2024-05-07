@@ -4,7 +4,7 @@
 
 <% if @report.errors.any? %>
   <div id="error_explanation">
-    <h2><%= pluralize(@report.errors.count, "error") %> <%= t('views.common.failed_to_save') %>:</h2>
+    <h2><%= pluralize(@report.errors.count, "error") %> <%= t('views.common.validation_error', name: Report.model_name.human) %>:</h2>
     <ul>
       <% @report.errors.full_messages.each do |message| %>
         <li><%= message %></li>

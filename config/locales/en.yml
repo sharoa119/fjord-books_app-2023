@@ -230,7 +230,6 @@ en:
       validation_error: "%{errors} prohibited this %{name} from being saved"
       title_show: "%{name} details"
       sign_out: "Sign out"
-      failed_to_save: "Saving this report failed."
   controllers:
     common:
       notice_create: "%{name} was successfully created."
