@@ -23,24 +23,13 @@ class Report < ApplicationRecord
 
   def save_with_mentions
     ActiveRecord::Base.transaction do
+      mentioning_reports.destroy_all
+
       if save
         create_mentions(mentioning_report_ids(content))
         true
       else
         errors.add(:base, t('controllers.error.error_create', name: Report.model_name.human))
-        raise ActiveRecord::Rollback
-      end
-    end
-  end
-
-  def update_with_mentions(params)
-    ActiveRecord::Base.transaction do
-      mentioning_reports.destroy_all
-
-      if update(params)
-        save_with_mentions
-      else
-        errors.add(:base, t('controllers.error.error_update', name: Report.model_name.human))
         raise ActiveRecord::Rollback
       end
     end
