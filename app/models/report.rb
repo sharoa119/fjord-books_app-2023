@@ -21,18 +21,36 @@ class Report < ApplicationRecord
     created_at.to_date
   end
 
+  def build_mentions(content)
+    mentioning_report_ids(content).uniq.map do |id|
+      { mentioning_report_id: self.id, mentioned_report_id: id }
+    end
+  end
+
+  def create_mentions(mentions)
+    existing_reports = Report.where(id: mentions.map { |m| m[:mentioned_report_id] }).pluck(:id)
+    mentions_to_create = mentions.reject { |m| m[:mentioned_report_id] == id || !existing_reports.include?(m[:mentioned_report_id]) }
+    Mention.create(mentions_to_create) unless mentions_to_create.empty?
+  end
+
   def save_with_mentions
     ActiveRecord::Base.transaction do
       mentioning_reports.destroy_all
 
       if save
-        create_mentions(mentioning_report_ids(content))
+        mentions_to_create = build_mentions(content)
+        create_mentions(mentions_to_create)
         true
       else
         errors.add(:base, t('controllers.error.error_create', name: Report.model_name.human))
         raise ActiveRecord::Rollback
       end
     end
+  end
+
+  def update_with_mentions(report_params)
+    self.attributes = report_params
+    save_with_mentions
   end
 
   def extract_report_id_from_url(url)
@@ -44,16 +62,5 @@ class Report < ApplicationRecord
     urls = content.scan(%r{\bhttps?://\S+\b})
 
     urls.map { |url| extract_report_id_from_url(url) }.uniq
-  end
-
-  private
-
-  def create_mentions(report_ids)
-    report_ids.each do |id|
-      report = Report.find_by(id:)
-      next unless report && report != self
-
-      mentioning.create!(mentioned_report_id: id)
-    end
   end
 end
