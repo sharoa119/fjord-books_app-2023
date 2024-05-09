@@ -30,7 +30,7 @@ class ReportsController < ApplicationController
 
   def update
     @report = Report.find(params[:id])
-
+    @report.attributes = report_params
     if @report.update_with_mentions(report_params)
       redirect_to @report, notice: t('controllers.common.notice_update', name: Report.model_name.human)
     else

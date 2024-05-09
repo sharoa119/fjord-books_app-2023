@@ -21,16 +21,10 @@ class Report < ApplicationRecord
     created_at.to_date
   end
 
-  def build_mentions(content)
-    mentioning_report_ids(content).uniq.map do |id|
-      { mentioning_report_id: self.id, mentioned_report_id: id }
-    end
-  end
-
   def create_mentions(mentions)
-    existing_reports = Report.where(id: mentions.map { |m| m[:mentioned_report_id] }).pluck(:id)
-    mentions_to_create = mentions.reject { |m| m[:mentioned_report_id] == id || !existing_reports.include?(m[:mentioned_report_id]) }
-    Mention.create(mentions_to_create) unless mentions_to_create.empty?
+    existing_reports = Report.where.not(id:).where(id: mentions).pluck(:id)
+    mentions_to_create = mentions.map { |mention| { mentioned_report_id: mention } if existing_reports.include?(mention) }.compact
+    mentioning.create(mentions_to_create) unless mentions_to_create.empty?
   end
 
   def save_with_mentions
@@ -38,8 +32,7 @@ class Report < ApplicationRecord
       mentioning_reports.destroy_all
 
       if save
-        mentions_to_create = build_mentions(content)
-        create_mentions(mentions_to_create)
+        create_mentions(mentioning_report_ids(content))
         true
       else
         errors.add(:base, t('controllers.error.error_create', name: Report.model_name.human))
@@ -48,8 +41,7 @@ class Report < ApplicationRecord
     end
   end
 
-  def update_with_mentions(report_params)
-    self.attributes = report_params
+  def update_with_mentions(_report_params)
     save_with_mentions
   end
 
