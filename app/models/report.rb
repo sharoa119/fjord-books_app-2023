@@ -23,8 +23,11 @@ class Report < ApplicationRecord
 
   def create_mentions(mentions)
     existing_reports = Report.where.not(id:).where(id: mentions).pluck(:id)
-    mentions_to_create = mentions.map { |mention| { mentioned_report_id: mention } if existing_reports.include?(mention) }.compact
-    mentioning.create(mentions_to_create) unless mentions_to_create.empty?
+    return if existing_reports.empty?
+
+    existing_reports.each do |id|
+      mentioning.create(mentioned_report_id: id)
+    end
   end
 
   def save_with_mentions
@@ -39,10 +42,6 @@ class Report < ApplicationRecord
         raise ActiveRecord::Rollback
       end
     end
-  end
-
-  def update_with_mentions(_report_params)
-    save_with_mentions
   end
 
   def extract_report_id_from_url(url)
