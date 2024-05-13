@@ -235,6 +235,9 @@ en:
       notice_create: "%{name} was successfully created."
       notice_update: "%{name} was successfully updated."
       notice_destroy: "%{name} was successfully destroyed."
+    error:
+      error_create: "Failed to create %{name}."
+      error_update: "Failed to update %{name}."
   layouts:
     menu:
       menu: Menu
