@@ -22,8 +22,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'should not save user with duplicate email' do
-    user1 = User.create(name: 'User Foo', email: 'test_user_foo@example.com', password: 'password')
-    user2 = User.new(name: 'User Bar', email: 'test_user_foo@example.com', password: 'password')
-    assert_not user2.save
+    User.create(name: 'User Foo', email: 'test_user_foo@example.com', password: 'password')
+    user1 = User.new(name: 'User Bar', email: 'test_user_foo@example.com', password: 'password')
+    assert_not user1.save
   end
 end
