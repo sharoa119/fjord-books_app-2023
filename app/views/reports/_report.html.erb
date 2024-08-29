@@ -11,7 +11,11 @@
 
   <p>
     <strong><%= Report.human_attribute_name(:user) %>:</strong>
-    <%= link_to report.user.name_or_email, report.user %>
+    <% if report.user %>
+      <%= link_to report.user.name_or_email, report.user %>
+    <% else %>
+      <%= "Unknown User" %>
+    <% end %>
   </p>
 
   <p>
