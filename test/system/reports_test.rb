@@ -3,17 +3,15 @@
 require 'application_system_test_case'
 
 class ReportsTest < ApplicationSystemTestCase
+  fixtures :users, :reports
+
   setup do
-    @user = User.create!(name: 'Alice', email: 'test_alice@example.com', password: 'password')
-    @report = Report.create!(
-      title: 'Sample Report',
-      content: 'This is a sample report.',
-      user: @user
-    )
+    @user = users(:user_foo)
+    @report = reports(:sample_report)
 
     visit root_url
     fill_in 'Eメール', with: @user.email
-    fill_in 'パスワード', with: @user.password
+    fill_in 'パスワード', with: 'password'
     click_button 'ログイン'
     assert_text 'ログインしました。'
   end
@@ -43,6 +41,6 @@ class ReportsTest < ApplicationSystemTestCase
     click_on 'この日報を削除', match: :first
 
     assert_current_path reports_url
-    assert_no_text 'Updated Report Title'
+    assert_no_text 'Sample Report'
   end
 end

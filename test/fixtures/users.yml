@@ -9,3 +9,13 @@
 # 
 # two: {}
 # column: value
+
+user_foo:
+  name: "user Foo"
+  email: "user_foo@example.com"
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+
+user_bar:
+  name: "user Bar"
+  email: "user_bar@example.com"
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
