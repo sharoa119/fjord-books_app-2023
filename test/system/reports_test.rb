@@ -37,10 +37,15 @@ class ReportsTest < ApplicationSystemTestCase
   test '日報を削除できること' do
     visit reports_url
     assert_text @report.title
-    click_on 'この日報を表示', match: :first
-    click_on 'この日報を削除', match: :first
+
+    within '.index-item', text: @report.title do
+      click_on 'この日報を表示'
+    end
+
+    assert_selector 'button', text: 'この日報を削除'
+    click_button 'この日報を削除'
 
     assert_current_path reports_url
-    assert_no_text 'Sample Report'
+    assert_no_text @report.title
   end
 end
