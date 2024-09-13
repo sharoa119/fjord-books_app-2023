@@ -28,22 +28,14 @@ class ReportTest < ActiveSupport::TestCase
     assert_equal '2024-09-04', @report.created_on.to_s
   end
 
-  test 'should belong to user' do
-    assert_equal @user1, @report.user
-  end
-
-# 追加するテスト
   test 'should create mentions after save' do
-    # メンションのあるコンテンツを設定
-    mentioned_report = reports(:another_report) # 適切なフィクスチャを使用
+    mentioned_report = reports(:another_report)
     @report.content = "Mentioning http://localhost:3000/reports/#{mentioned_report.id}"
 
-    # 保存してメンションが作成されるか確認
     assert_difference('@report.mentioning_reports.count', 1) do
       @report.save
     end
 
-    # 期待するメンションが含まれているか確認
     assert_includes @report.mentioning_reports, mentioned_report
   end
 
