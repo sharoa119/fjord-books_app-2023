@@ -55,4 +55,33 @@ class ReportTest < ActiveSupport::TestCase
     assert_includes @report.mentioning_reports, mentioned_report1
     assert_includes @report.mentioning_reports, mentioned_report2
   end
+
+  test 'should remove mentions when links are removed from content' do
+    mentioned_report = reports(:another_report)
+    @report.content = "Mentioning http://localhost:3000/reports/#{mentioned_report.id}"
+    @report.save
+
+    assert_includes @report.mentioning_reports, mentioned_report
+
+    @report.content = "No more mentions here."
+    assert_difference('@report.mentioning_reports.count', -1) do
+      @report.save
+      @report.reload
+    end
+
+    assert_not_includes @report.mentioning_reports, mentioned_report
+  end
+
+  test 'should keep mentions when links are retained in content' do
+    mentioned_report = reports(:another_report)
+    @report.content = "Mentioning http://localhost:3000/reports/#{mentioned_report.id}"
+    @report.save
+
+    assert_includes @report.mentioning_reports, mentioned_report
+
+    @report.title = 'Updated Sample Report'
+    @report.save
+
+    assert_includes @report.mentioning_reports, mentioned_report
+  end
 end
