@@ -1,11 +1,14 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+sample_report:
+  title: 'Sample Report'
+  content: 'This is a sample report.'
+  user: user_foo
 
-one:
-  user: one
-  title: MyString
-  content: MyText
+another_report:
+  title: 'Another Report'
+  content: 'This is another report.'
+  user: user_foo
 
-two:
-  user: two
-  title: MyString
-  content: MyText
+yet_another_report:
+  title: 'Yet Another Report'
+  content: 'This is yet another report.'
+  user: user_bar

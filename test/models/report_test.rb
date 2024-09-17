@@ -3,7 +3,85 @@
 require 'test_helper'
 
 class ReportTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  fixtures :users, :reports
+
+  def setup
+    @user1 = users(:user_foo)
+    @user2 = users(:user_bar)
+
+    @fixed_time = Time.zone.local(2024, 9, 4)
+    travel_to @fixed_time do
+      @report = Report.create!(
+        title: 'Sample Report',
+        content: 'This is a sample report.',
+        user: @user1
+      )
+    end
+  end
+
+  test '#editable?' do
+    assert @report.editable?(@user1)
+    assert_not @report.editable?(@user2)
+  end
+
+  test '#created_on' do
+    assert_equal '2024-09-04', @report.created_on.to_s
+  end
+
+  test 'should create mentions after save' do
+    mentioned_report = reports(:another_report)
+    @report.content = "Mentioning http://localhost:3000/reports/#{mentioned_report.id}"
+
+    assert_difference('@report.mentioning_reports.count', 1) do
+      @report.save
+    end
+
+    assert_includes @report.mentioning_reports, mentioned_report
+  end
+
+  test 'should handle mentions that reference non-existent reports' do
+    @report.content = "Mentioning http://localhost:3000/reports/999999"
+    @report.save
+
+    assert_empty @report.mentioning_reports
+  end
+
+  test 'should create multiple mentions' do
+    mentioned_report1 = reports(:another_report)
+    mentioned_report2 = reports(:yet_another_report)
+    @report.content = "Mentioning http://localhost:3000/reports/#{mentioned_report1.id} and http://localhost:3000/reports/#{mentioned_report2.id}"
+    @report.save
+
+    assert_includes @report.mentioning_reports, mentioned_report1
+    assert_includes @report.mentioning_reports, mentioned_report2
+  end
+
+  test 'should remove mentions when links are removed from content' do
+    mentioned_report = reports(:another_report)
+    @report.content = "Mentioning http://localhost:3000/reports/#{mentioned_report.id}"
+    @report.save
+
+    assert_includes @report.mentioning_reports, mentioned_report
+
+    @report.content = "No more mentions here."
+    assert_difference('@report.mentioning_reports.count', -1) do
+      @report.save
+      @report.reload
+    end
+
+    assert_not_includes @report.mentioning_reports, mentioned_report
+  end
+
+  test 'should keep mentions when links are retained in content' do
+    mentioned_report = reports(:another_report)
+    @report.content = "Mentioning http://localhost:3000/reports/#{mentioned_report.id}"
+    @report.save
+
+    assert_includes @report.mentioning_reports, mentioned_report
+
+    @report.title = 'Updated Sample Report'
+    @report.save
+
+    assert_includes @report.mentioning_reports, mentioned_report
+  end
 end
